@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+    <form action="{{ url_for('main.edit') }}" method="post">
+    {% for product in products %}
+    <input type="hidden" name="product_ids[]" value="{{ product.id }}">
+    <div class="mb-3">
+    <h2>Nombre:</h2>
+      <input name="name_{{ product.id }}" value="{{ product.name }}" class="form-control">
+      </div>
+      <div class="mb-3">
+      <h2>Cantidad:</h2>
+    <input name="quantity_{{ product.id }}" value="{{ product.quantity }}" class="form-control">
+    </div>
+    <div class="mb-3">
+    <h2>Precio:</h2>
+    <input name="price_{{ product.id }}" value="{{ product.price }}" class="form-control">
+    </div>
+    {% endfor %}
+    
+    
+    <button class="btn btn-primary">editar</button>
+    </form>
+</div>
+</body>
+</html>
