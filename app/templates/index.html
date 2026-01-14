@@ -13,9 +13,7 @@
     <!-- Top Toolbar -->
     <div class="d-flex gap-2 mb-4 flex-wrap align-items-center">
       <!-- Left buttons -->
-      <form action="{{ url_for('main.add') }}" method="get">
-        <button class="btn btn-success btn-lg">Añadir</button>
-      </form>
+      
 
       <!-- Right buttons -->
       <div class="ms-auto d-flex gap-2">
@@ -23,7 +21,7 @@
           <button class="btn btn-success btn-lg">Vender</button>
         </form>
         <form action="{{ url_for('main.search_endpoint') }}" method="post">
-          <input type="text" name="search">
+          <input type="text" name="search" >
           <button class="btn btn-primary btn-lg" name="search_action" value="index_search">
             <i class="bi bi-search me-1"></i> Buscar
           </button>
@@ -32,10 +30,14 @@
     </div>
 
     <!-- Inventory Table Form -->
+    <div class="d-flex gap-2 mb-3">
+    <form action="{{ url_for('main.add') }}" method="get">
+        <button class="btn btn-success btn-lg" >Añadir</button>
+      </form>
     <form action="{{ url_for('main.get_selected') }}" method="post">
 
       <!-- Edit/Delete Buttons ABOVE the table -->
-      <div class="d-flex gap-2 mb-3">
+      
         <button class="btn btn-warning btn-lg" name="action" value="edit">Editar</button>
         <button class="btn btn-danger btn-lg"
                 name="action" value="delete"
@@ -64,6 +66,15 @@
             <td>{{ item.price }}</td>
           </tr>
           {% endfor %}
+          {% if not items  %}
+          <td>
+            intenta buscar algo.
+            </td>
+            <tr>
+              
+          {% endif %}
+          
+          </tr>
         </tbody>
       </table>
     </form>
