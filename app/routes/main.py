@@ -8,8 +8,7 @@ main_bp = Blueprint("main", __name__)
 
 @main_bp.route("/")
 def home():
-    items = Product.query.all()
-    return render_template("index.html", items=items)
+    return render_template("index.html")
 
 @main_bp.route("/add", methods=["GET", "POST"])
 def add():
@@ -75,14 +74,18 @@ class Sell_list():
 
 @main_bp.route('/search', methods=['GET','POST'])
 def search_endpoint():
-    action = request.form.get('action')
+    action = request.form.get('search_action')
+    search_value = request.form.get('search')
+    searched_object = search(search_value)
     if action == 'sell_search':
-        search_value = request.form.get('search')
-        print(search_value)
-        searched_object = search(search_value)
         return render_template(
         'sell.html',
         results=searched_object)
+    elif action == 'index_search':
+        return render_template(
+            'index.html',
+            items=searched_object
+        )
 
 
 @main_bp.route("/sell", methods=["GET", "POST"])
