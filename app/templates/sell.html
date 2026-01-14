@@ -8,9 +8,9 @@
 </head>
 <body>
     <h1>{{total}}</h1>
-    <form action="" method="post" >
+    <form action=" {{ url_for('main.search_endpoint') }}  " method="post" >
     <input type="text" name="search">
-    <button name="action" value="search" class="btn btn-primary">Buscar</button>
+    <button name="action" value="sell_search" class="btn btn-primary">Buscar</button>
     </form>
     {% for item in results  %}
     <div>

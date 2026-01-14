@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, url_for, request, redirect
-from app.services import chunk_list, search, calc_price
+from app.services import search, calc_price
 from app.models.main import Product
 from app.extensions import db
 
@@ -50,8 +50,8 @@ def get_selected():
         if action == "delete":
             for prdt in products:
                 db.session.delete(prdt)
-                db.session.commit()
-                return redirect(url_for("main.home"))
+            db.session.commit()
+            return redirect(url_for("main.home"))
 
 @main_bp.route("/edit", methods=["POST"])
 def edit():
@@ -62,9 +62,9 @@ def edit():
             product = Product.query.get(id)
             if not product:
                 return "Producto no encontrado", 404
-        product.name = request.form.get(f"name_{id}")
-        product.quantity = int(request.form.get(f"quantity_{id}"))
-        product.price = int(request.form.get(f"price_{id}"))
+            product.name = request.form.get(f"name_{id}")
+            product.quantity = int(request.form.get(f"quantity_{id}"))
+            product.price = int(request.form.get(f"price_{id}"))
         
         db.session.commit()
         return redirect(url_for("main.home"))
@@ -73,20 +73,25 @@ def edit():
 class Sell_list():
     to_sell = []
 
+@main_bp.route('/search', methods=['GET','POST'])
+def search_endpoint():
+    action = request.form.get('action')
+    if action == 'sell_search':
+        search_value = request.form.get('search')
+        print(search_value)
+        searched_object = search(search_value)
+        return render_template(
+        'sell.html',
+        results=searched_object)
+
 
 @main_bp.route("/sell", methods=["GET", "POST"])
 def sell():
     sell_list = Sell_list()
     if request.method == "GET":
-        return render_template('sell.html')
+        return render_template('sell.html', to_sell=sell_list.to_sell)
 
     action = request.form.get('action')
-    if action == 'search':
-        search_value = request.form.get('search')
-        searched_object = search(search_value)
-        return render_template(
-        'sell.html',
-        results=searched_object)
 
     if action == 'add_to_sell_list':
         item_id = request.form.get('item_id')
@@ -99,7 +104,10 @@ def sell():
         ids = request.form.getlist('item_id[]')
         nmb_quantities = []
         for nmb in quantities:
-            new_nmb = int(nmb)
+            try:
+                new_nmb = int(nmb)
+            except ValueError:
+                return 'algo salio mal.', 404
             nmb_quantities.append(new_nmb)
     
         product_prices = []
